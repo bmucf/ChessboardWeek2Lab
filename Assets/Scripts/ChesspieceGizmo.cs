@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -155,22 +156,22 @@ namespace UnityEditor
     [CustomEditor(typeof(GameObject))]
     public class CustomInspector : Editor
     {
-        private GameObject[] objects;
-
-        public void OnEnable()
-        {
-            // Note: If you use FindGameObjectsWithTag in a Prefab Stage that you opened from a Scene,
-            // it includes GameObjects from that Scene. Instead use:
-            // var renderers = StageUtility.GetCurrentStage().FindComponentsOfType<Renderer>();
-            // to explicitly specify where to get the GameObjects from.
-            objects = GameObject.FindGameObjectsWithTag("Player");  // populate the objects array with game objects
-        }
-
         public void OnSceneGUI()
         {
-            // draw the outline with an alpha of 0.5
+            GameObject selectedObject = (GameObject)target;
+            
+
+            int controlID = 1;
+            Transform transform = selectedObject.transform;
+            Vector3 position = transform.position;
+            Quaternion rotation = Quaternion.identity;
+            float size = 0.45f;
+            EventType eventType = EventType.Repaint;
+            Handles.color = Color.red;
+
+            // draw the outline with an alpha of 1.0
             if (Event.current.type == EventType.Repaint)
-                Handles.DrawOutline(objects, Color.yellow, Color.green, 0.1f);
+                Handles.DrawSelectionFrame(controlID, position, rotation, size, eventType);
         }
     }
 }
