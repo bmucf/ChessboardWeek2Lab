@@ -149,3 +149,28 @@ public class ChesspieceGizmo : MonoBehaviour
         Gizmos.DrawLineList(moves);
     }
 }
+
+namespace UnityEditor
+{
+    [CustomEditor(typeof(GameObject))]
+    public class CustomInspector : Editor
+    {
+        private GameObject[] objects;
+
+        public void OnEnable()
+        {
+            // Note: If you use FindGameObjectsWithTag in a Prefab Stage that you opened from a Scene,
+            // it includes GameObjects from that Scene. Instead use:
+            // var renderers = StageUtility.GetCurrentStage().FindComponentsOfType<Renderer>();
+            // to explicitly specify where to get the GameObjects from.
+            objects = GameObject.FindGameObjectsWithTag("Player");  // populate the objects array with game objects
+        }
+
+        public void OnSceneGUI()
+        {
+            // draw the outline with an alpha of 0.5
+            if (Event.current.type == EventType.Repaint)
+                Handles.DrawOutline(objects, Color.yellow, Color.green, 0.1f);
+        }
+    }
+}
